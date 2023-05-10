@@ -13,7 +13,7 @@ import model.entities.Department;
 import model.entities.Seller;
 
 public class SellerDaoJDBC implements SellerDao {
-	
+
 	// declare object connection
 	private Connection conn;
 
@@ -21,23 +21,23 @@ public class SellerDaoJDBC implements SellerDao {
 	public SellerDaoJDBC(Connection conn) {
 		this.conn = conn;
 	}
-	
+
 	@Override
 	public void insert(Seller obj) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void update(Seller obj) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void deleteById(Integer id) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -46,33 +46,20 @@ public class SellerDaoJDBC implements SellerDao {
 		ResultSet rs = null;
 		try {
 			st = conn.prepareStatement(
-					"SELECT seller.*,department.Name as DepName "
-					+ "FROM seller INNER JOIN department "
-					+ "ON seller.DepartmentId = department.Id "
-					+ "WHERE seller.Id = ? ");
-			
+					"SELECT seller.*,department.Name as DepName " + "FROM seller INNER JOIN department "
+							+ "ON seller.DepartmentId = department.Id " + "WHERE seller.Id = ? ");
+
 			st.setInt(1, id);
-			rs = st.executeQuery(); // rs is position zero, to find seller do the logic with if
-			if(rs.next()) { // if exist instantiate dep and seller
-				Department dep = new Department();
-				dep.setId(rs.getInt("DepartmentId"));
-				dep.setName(rs.getString("DepName"));
-				Seller obj = new Seller();
-				obj.setId(rs.getInt("Id"));
-				obj.setName(rs.getString("Name"));
-				obj.setEmail(rs.getString("Email"));
-				obj.setBaseSalary(rs.getDouble("BaseSalary"));
-				obj.setBirthdate(rs.getDate("BirthDate"));
-				obj.setDepartment(dep);
+			rs = st.executeQuery(); // rs is position zero, use if to find the seller
+			if (rs.next()) { // if exist instantiate dep and seller
+				Department dep = instantiateDepartment(rs);
+				Seller obj = instantiateSeller(rs, dep);
+
 				return obj;
-				
-//				Department dep = instantiateDepartment(rs);
-//				Seller obj = instantiateSeller(rs, dep);
-//				return obj;
 			}
 			return null;
-			
-		}
+
+		} 
 		catch (SQLException e) {
 			throw new DbException(e.getMessage());
 		}
@@ -80,6 +67,27 @@ public class SellerDaoJDBC implements SellerDao {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
 		}
+	}
+	
+	// created to reuse in methods
+	private Seller instantiateSeller(ResultSet rs, Department dep) throws SQLException {
+		Seller obj = new Seller();
+		obj.setId(rs.getInt("Id"));
+		obj.setName(rs.getString("Name"));
+		obj.setEmail(rs.getString("Email"));
+		obj.setBaseSalary(rs.getDouble("BaseSalary"));
+		obj.setBirthdate(rs.getDate("BirthDate"));
+		obj.setDepartment(dep);
+		
+		return obj;
+	}
+
+	// created to reuse in methods
+	private Department instantiateDepartment(ResultSet rs) throws SQLException {
+		Department dep = new Department();
+		dep.setId(rs.getInt("DepartmentId"));
+		dep.setName(rs.getString("DepName"));
+		return dep;
 	}
 
 	@Override
@@ -93,6 +101,5 @@ public class SellerDaoJDBC implements SellerDao {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 
 }
