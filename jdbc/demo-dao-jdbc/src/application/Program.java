@@ -52,8 +52,10 @@ public class Program {
 		System.out.print("Enter id to delete: ");
 		int id = sc.nextInt();
 
+		// added by me to show name deleted
 		seller = sellerDao.findById(id);
-
+		
+		// this treatment should be on deleteById() method
 		if (seller == null) {
 			System.out.println("Seller doesn't exist");
 		} else {
