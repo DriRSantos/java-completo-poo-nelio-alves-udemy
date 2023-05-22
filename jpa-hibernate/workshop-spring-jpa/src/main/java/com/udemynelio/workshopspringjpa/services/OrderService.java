@@ -12,10 +12,10 @@ import com.udemynelio.workshopspringjpa.repositories.OrderRepository;
 public class OrderService {
 
 	@Autowired
-	private OrderRepository userRepository;
+	private OrderRepository orderRepository;
 	
 	public List<Order> findAll(){
-		return userRepository.findAll();
+		return orderRepository.findAll();
 	}
 	
 	
@@ -23,6 +23,6 @@ public class OrderService {
 //		Optional<Order> obj = userRepository.findById(id);
 //		return obj.get();
 		
-		return userRepository.findById(id).get();
+		return orderRepository.findById(id).get();
 	}
 }

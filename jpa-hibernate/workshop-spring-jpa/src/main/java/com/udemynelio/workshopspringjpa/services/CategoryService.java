@@ -12,10 +12,10 @@ import com.udemynelio.workshopspringjpa.repositories.CategoryRepository;
 public class CategoryService {
 
 	@Autowired
-	private CategoryRepository userRepository;
+	private CategoryRepository categoryRepository;
 	
 	public List<Category> findAll(){
-		return userRepository.findAll();
+		return categoryRepository.findAll();
 	}
 	
 	
@@ -23,6 +23,6 @@ public class CategoryService {
 //		Optional<Category> obj = userRepository.findById(id);
 //		return obj.get();
 		
-		return userRepository.findById(id).get();
+		return categoryRepository.findById(id).get();
 	}
 }
