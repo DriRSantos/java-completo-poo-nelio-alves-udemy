@@ -10,10 +10,12 @@ import org.springframework.context.annotation.Profile;
 
 import com.udemynelio.workshopspringjpa.entities.Category;
 import com.udemynelio.workshopspringjpa.entities.Order;
+import com.udemynelio.workshopspringjpa.entities.OrderItem;
 import com.udemynelio.workshopspringjpa.entities.Product;
 import com.udemynelio.workshopspringjpa.entities.User;
 import com.udemynelio.workshopspringjpa.entities.enums.OrderStatus;
 import com.udemynelio.workshopspringjpa.repositories.CategoryRepository;
+import com.udemynelio.workshopspringjpa.repositories.OrderItemRepository;
 import com.udemynelio.workshopspringjpa.repositories.OrderRepository;
 import com.udemynelio.workshopspringjpa.repositories.ProductRepository;
 import com.udemynelio.workshopspringjpa.repositories.UserRepository;
@@ -33,6 +35,9 @@ public class TestConfig implements CommandLineRunner {
 	
 	@Autowired
 	private ProductRepository productRepository;
+	
+	@Autowired
+	private OrderItemRepository orderItemRepository;
 	
 	@Override
 	public void run(String... args) throws Exception { 
@@ -69,6 +74,13 @@ public class TestConfig implements CommandLineRunner {
 		Order o3 = new Order(null, Instant.parse("2019-07-22T15:21:22Z"), OrderStatus.WAINTING_PAYMENT, u1);
 		
 		orderRepository.saveAll(Arrays.asList(o1, o2, o3));
+		
+		OrderItem oi1 = new OrderItem(o1, p1, 2, p1.getPrice());
+		OrderItem oi2 = new OrderItem(o1, p3, 1, p3.getPrice());
+		OrderItem oi3 = new OrderItem(o2, p3, 2, p3.getPrice());
+		OrderItem oi4 = new OrderItem(o3, p5, 2, p5.getPrice());
+		
+		orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3, oi4));
 		
 	}
 	
